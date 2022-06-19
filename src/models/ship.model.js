@@ -15,6 +15,12 @@ const shipSchema = new mongoose.Schema(
         type: string,
         required: true
     },
+    inkLevel: {
+      type: Number,
+      default: 100,
+      required: true
+    },
+    
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

@@ -8,10 +8,10 @@ const router = express.Router();
 router.post('/', userController.createUser)
 router.post('/login', userController.login)
 router.post('/logout', auth, userController.logout)
-router.get('/', userController.returnSelf)
-router.delete('/', userController.deleteUser)
-router.post('/logoutall', userController.logoutAll)
-router.patch('/', userController.updateUser)
+router.get('/', auth, userController.returnSelf)
+router.delete('/', auth, userController.deleteUser)
+router.post('/logoutall', auth. userController.logoutAll)
+router.patch('/', auth, userController.updateUser)
 
 
 

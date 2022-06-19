@@ -1,6 +1,7 @@
 const express = require('express');
 const chunkRoute = require('./chunk.route');
-const userRoute = require('./user.route')
+const userRoute = require('./user.route');
+const shipRoute = require('./ship.route')
 const router = express.Router();
 
 const defaultRoutes = [
@@ -11,7 +12,10 @@ const defaultRoutes = [
     path: '/user',
     route: userRoute,
   },
-  
+  ,{
+    path: '/ship',
+    route: shipRoute,
+  },
 
 ];
 

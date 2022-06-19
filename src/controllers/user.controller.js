@@ -81,7 +81,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-//for dev mostly
 const returnSelf = async (req, res) => {
   res.send(req.user);
 };
