@@ -10,7 +10,7 @@ router.post('/login', userController.login)
 router.post('/logout', auth, userController.logout)
 router.get('/', auth, userController.returnSelf)
 router.delete('/', auth, userController.deleteUser)
-router.post('/logoutall', auth. userController.logoutAll)
+router.post('/logoutAll', auth, userController.logoutAll)
 router.patch('/', auth, userController.updateUser)
 
 

@@ -2,15 +2,11 @@ const mongoose = require("mongoose");
 
 const chunkSchema = new mongoose.Schema(
   {
-    original_id: {
-      type: String,
-      trim: true,
-      required: true,
-    },
+
     position: {
       type: Array,
       required: true,
-      unique: true
+      default: [0, 0]
 
     },
     state: {

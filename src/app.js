@@ -4,12 +4,13 @@ const app = express();
 app.use(express.json());
 const cors = require("cors");
 const corsOptions = {
-  origin: 'localhost:3000',
+  origin: 'http://localhost:3000',
   // credentials: true,
 };
 app.use(cors(corsOptions));
 const router = require("./routers/v1");
 app.use("/v1", router);
+
 
 // const io = require("socket.io")(server);
 

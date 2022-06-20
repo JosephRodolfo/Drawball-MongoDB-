@@ -1,16 +1,28 @@
 const express = require("express");
 const User = require("../models/user.model");
+const Ship = require("../models/ship.model")
 
 const createUser = async (req, res) => {
   const user = new User(req.body);
 
+
   try {
     await user.save();
+
     const token = await user.generateAuthToken();
     res.status(201).send({ user, token });
+
+
+
+
+
+
+    
   } catch (e) {
     res.status(400).send(e);
   }
+
+
 };
 
 const login = async (req, res) => {
@@ -27,7 +39,6 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    console.log(req);
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;

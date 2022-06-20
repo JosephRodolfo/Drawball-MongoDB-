@@ -35,11 +35,10 @@ const getShipById = async (req, res) => {
 
   try {
     const ship = await Ship.findOne({
-      _id,
-      owner: req.user._id,
+      owner: _id,
     });
 
-    if (!post) {
+    if (!ship) {
       return res.status(404).send();
     }
 
