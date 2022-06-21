@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/', chunkController.createChunk)
 router.post('/getchunk', chunkController.getChunkByPosition)
 router.patch('/:id', chunkController.updateChunk)
+router.patch('/', chunkController.colorChunk)
 
 
 

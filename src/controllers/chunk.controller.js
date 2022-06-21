@@ -42,7 +42,7 @@ const updateChunk = async (req, res) => {
       _id: req.params.id,
     });
 
-    if (!task) {
+    if (!chunk) {
       return res.status(404).send();
     }
     updates.forEach((update) => (chunk[update] = req.body[update]));
@@ -55,8 +55,31 @@ const updateChunk = async (req, res) => {
   }
 };
 
+const colorChunk = async (req, res) => {
+  try {
+    const chunk = await Chunk.findOne({ position: req.body.position });
+
+    if (!chunk) {
+      return res.status(404).send();
+    }
+    // console.log(req.body.state.x, req.body.state.y, req.body.color);
+    chunk.state[req.body.state.x][req.body.state.y] = req.body.color;
+    let newState = chunk.state;
+
+    let newChunk = await Chunk.findOneAndUpdate(
+      { position: req.body.position },
+      { state: newState },
+      { new: true }
+    );
+    // await chunk.save();
+    res.send(newChunk);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+};
 module.exports = {
   createChunk,
   getChunkByPosition,
   updateChunk,
+  colorChunk,
 };

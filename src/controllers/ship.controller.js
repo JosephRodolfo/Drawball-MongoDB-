@@ -61,7 +61,6 @@ const updateShip = async (req, res) => {
 
   try {
     const ship = await Ship.findOne({
-      _id: req.params.id,
       owner: req.user._id,
     });
 
