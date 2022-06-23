@@ -15,11 +15,16 @@ const createChunk = async (req, res) => {
 
 const getChunkByPosition = async (req, res) => {
   try {
-    const chunk = await Chunk.find({ position: req.body.position });
+    const chunk = await Chunk.findOne({ position: req.body.position });
 
     if (!chunk || chunk.length === 0) {
       return res.status(404).send();
     }
+
+    const nullRemoved = chunk.state.filter(function (e) {
+      return e;
+    });
+    chunk.state = nullRemoved;
     res.status(201).send(chunk);
   } catch (e) {
     res.status(500).send(e);
@@ -58,12 +63,23 @@ const updateChunk = async (req, res) => {
 const colorChunk = async (req, res) => {
   try {
     const chunk = await Chunk.findOne({ position: req.body.position });
+    const updatesObject = req.body.state;
 
     if (!chunk) {
       return res.status(404).send();
     }
-    // console.log(req.body.state.x, req.body.state.y, req.body.color);
-    chunk.state[req.body.state.x][req.body.state.y] = req.body.color;
+
+    if (req.body.preexisting) {
+      const indexOfMatch = chunk.state.findIndex((element) => {
+        return element.coords.x === req.body.state.coords.x && element.coords.y === req.body.state.coords.y;
+      });
+
+      chunk.state.splice(indexOfMatch, 1, updatesObject);
+    } else {
+      
+      chunk.state.unshift(updatesObject);
+      chunk.state.pop();
+    }
     let newState = chunk.state;
 
     let newChunk = await Chunk.findOneAndUpdate(

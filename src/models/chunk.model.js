@@ -4,14 +4,14 @@ const chunkSchema = new mongoose.Schema(
   {
 
     position: {
-      type: Array,
+      type: Object,
       required: true,
-      default: [0, 0]
+      default: {x: 0, y: 0}
 
     },
     state: {
       type: Array,
-      default: [...Array(100)].map(e => Array(100)),
+      default: new Array(10000),
       required: true,
 
     },

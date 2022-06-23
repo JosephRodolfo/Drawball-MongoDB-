@@ -11,8 +11,8 @@ const shipSchema = new mongoose.Schema(
     currentChunk: {
       type: Object,
       default: {
-        position: [0, 0],
-        state: [...Array(100)].map(e => Array(100)),
+        position: {x: 0, y: 0},
+        state: new Array(10000),
         original_id: '095d9a68-7ebd-4d95-9b97-1d51b32c7718'
       },
       required: true
