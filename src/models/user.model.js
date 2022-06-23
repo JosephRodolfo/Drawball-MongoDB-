@@ -55,7 +55,6 @@ userSchema.methods.toJSON = function () {
   const userObject = user.toObject();
   delete userObject.password
   delete userObject.tokens
-  delete userObject.avatar
 
   return userObject
 };
@@ -97,7 +96,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-//delete user ships when user is removed
+//delete user ship when user is removed
 
 userSchema.pre("remove", async function (next) {
   const user = this;

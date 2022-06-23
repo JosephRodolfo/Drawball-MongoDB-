@@ -7,6 +7,8 @@ const createChunk = async (req, res) => {
 
   try {
     await chunk.save();
+    const nullRemoved = chunk.state.filter((e)=>e);
+    chunk.state = nullRemoved;
     res.status(201).send(chunk);
   } catch (e) {
     res.status(400).send(e);
@@ -21,9 +23,7 @@ const getChunkByPosition = async (req, res) => {
       return res.status(404).send();
     }
 
-    const nullRemoved = chunk.state.filter(function (e) {
-      return e;
-    });
+    const nullRemoved = chunk.state.filter((e)=>e)
     chunk.state = nullRemoved;
     res.status(201).send(chunk);
   } catch (e) {
@@ -80,9 +80,9 @@ const colorChunk = async (req, res) => {
       chunk.state.unshift(updatesObject);
       chunk.state.pop();
     }
-    let newState = chunk.state;
+    const newState = chunk.state;
 
-    let newChunk = await Chunk.findOneAndUpdate(
+    const newChunk = await Chunk.findOneAndUpdate(
       { position: req.body.position },
       { state: newState },
       { new: true }

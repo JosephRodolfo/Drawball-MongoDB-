@@ -39,13 +39,14 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
     });
     await req.user.save();
 
-    res.send();
+    res.send({user: null});
   } catch (e) {
     res.status(500).send();
   }
@@ -56,7 +57,7 @@ const logoutAll = async (req, res) => {
     req.user.tokens = [];
     await req.user.save();
 
-    res.send();
+    res.send(null);
   } catch (e) {
     res.status(500).send();
   }
