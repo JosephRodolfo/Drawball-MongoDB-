@@ -7,7 +7,7 @@ const createChunk = async (req, res) => {
 
   try {
     await chunk.save();
-    const nullRemoved = chunk.state.filter((e)=>e);
+    const nullRemoved = chunk.state.filter((e) => e);
     chunk.state = nullRemoved;
     res.status(201).send(chunk);
   } catch (e) {
@@ -23,7 +23,7 @@ const getChunkByPosition = async (req, res) => {
       return res.status(404).send();
     }
 
-    const nullRemoved = chunk.state.filter((e)=>e)
+    const nullRemoved = chunk.state.filter((e) => e);
     chunk.state = nullRemoved;
     res.status(201).send(chunk);
   } catch (e) {
@@ -62,6 +62,22 @@ const updateChunk = async (req, res) => {
 
 const colorChunk = async (req, res) => {
   try {
+
+    // const chunk = await Chunk.findOneAndUpdate(
+    //   { position: req.body.position, state: {coords: req.body.state.coords }},
+    //   { state: req.body.state.color },
+    //   {
+    //     upsert: true,
+    //     returnDocument: "after",
+    //   }
+    // );
+
+    // if (!chunk) {
+    //   return res.status(404).send();
+    // }
+
+    // res.send(chunk);
+
     const chunk = await Chunk.findOne({ position: req.body.position });
     const updatesObject = req.body.state;
 
@@ -73,10 +89,9 @@ const colorChunk = async (req, res) => {
       const indexOfMatch = chunk.state.findIndex((element) => {
         return element.coords.x === req.body.state.coords.x && element.coords.y === req.body.state.coords.y;
       });
-
       chunk.state.splice(indexOfMatch, 1, updatesObject);
     } else {
-      
+
       chunk.state.unshift(updatesObject);
       chunk.state.pop();
     }
@@ -88,7 +103,7 @@ const colorChunk = async (req, res) => {
       { new: true }
     );
     // await chunk.save();
-    res.send(newChunk);
+    res.send(updatesObject);
   } catch (e) {
     res.status(400).send(e);
   }

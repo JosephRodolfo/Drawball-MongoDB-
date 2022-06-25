@@ -9,14 +9,12 @@ const corsOptions = {
   // credentials: true,
 };
 app.use(cors(corsOptions));
+
+//route grouping
 const router = require("./routers/v1");
 app.use("/v1", router);
 
+//socket.io
 
-// const io = require("socket.io")(server);
-
-// io.on("connection", function (socket) {
-//   console.log("a user connected");
-// });
 
 module.exports = {app};
