@@ -50,7 +50,7 @@ const getShipById = async (req, res) => {
 
 const updateShip = async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ["inkLevel", "currentChunk", "position", "color"];
+  const allowedUpdates = ["inkLevel", "currentChunk", "position", "color", "chunkX", "chunkY"];
   const isValidOperation = updates.every((update) =>
     allowedUpdates.includes(update)
   );

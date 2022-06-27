@@ -1,5 +1,6 @@
 const Chunk = require("../models/chunk.model");
 
+//creates chunks the default sessionId is random. 
 const createChunk = async (req, res) => {
   const chunk = new Chunk({
     ...req.body,
@@ -7,24 +8,22 @@ const createChunk = async (req, res) => {
 
   try {
     await chunk.save();
-    const nullRemoved = chunk.state.filter((e) => e);
-    chunk.state = nullRemoved;
+ 
     res.status(201).send(chunk);
   } catch (e) {
     res.status(400).send(e);
   }
 };
-
+//finds list of all documents in Chunk collection corresponding to chunkX, chunkY. 
 const getChunkByPosition = async (req, res) => {
   try {
-    const chunk = await Chunk.findOne({ position: req.body.position });
-
+    const chunk = await Chunk.find({ chunkX: req.body.chunkX, chunkY: req.body.chunkY });
+//if not found, sends empty array, triggers creation of new sessionId, chunk position with next place color
     if (!chunk || chunk.length === 0) {
-      return res.status(404).send();
+      return res.send([]);
     }
 
-    const nullRemoved = chunk.state.filter((e) => e);
-    chunk.state = nullRemoved;
+ //sends array of values
     res.status(201).send(chunk);
   } catch (e) {
     res.status(500).send(e);
@@ -61,53 +60,23 @@ const updateChunk = async (req, res) => {
 };
 
 const colorChunk = async (req, res) => {
+  
   try {
 
-    // const chunk = await Chunk.findOneAndUpdate(
-    //   { position: req.body.position, state: {coords: req.body.state.coords }},
-    //   { state: req.body.state.color },
-    //   {
-    //     upsert: true,
-    //     returnDocument: "after",
-    //   }
-    // );
-
-    // if (!chunk) {
-    //   return res.status(404).send();
-    // }
-
-    // res.send(chunk);
-
-    const chunk = await Chunk.findOne({ position: req.body.position });
-    const updatesObject = req.body.state;
-
-    if (!chunk) {
-      return res.status(404).send();
-    }
-
-    if (req.body.preexisting) {
-      const indexOfMatch = chunk.state.findIndex((element) => {
-        return element.coords.x === req.body.state.coords.x && element.coords.y === req.body.state.coords.y;
-      });
-      chunk.state.splice(indexOfMatch, 1, updatesObject);
-    } else {
-
-      chunk.state.unshift(updatesObject);
-      chunk.state.pop();
-    }
-    const newState = chunk.state;
-
-    const newChunk = await Chunk.findOneAndUpdate(
-      { position: req.body.position },
-      { state: newState },
-      { new: true }
+    const chunk = await Chunk.findOneAndUpdate(
+      {  chunkX: req.body.chunkX, chunkY: req.body.chunkY, x: req.body.x, y: req.body.y},
+      { $set: {color: req.body.color} },
+      { returnDocument: 'after',  upsert:true, returnNewDocument : true },
     );
-    // await chunk.save();
-    res.send(updatesObject);
-  } catch (e) {
+
+
+    res.send(chunk);
+  } catch(e){
+    console.log(e)
+
     res.status(400).send(e);
-  }
-};
+  }}
+
 module.exports = {
   createChunk,
   getChunkByPosition,

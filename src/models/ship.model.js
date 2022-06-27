@@ -8,14 +8,24 @@ const shipSchema = new mongoose.Schema(
       default: {x: 0, y: 0}
 
     },
+    chunkX: {
+      type: Number,
+      required: true,
+      min: -100000,
+      max: 100000,
+      default: 0
+    },
+    chunkY: {
+      type: Number,
+      required: true,
+      min: -100000,
+      max: 100000,
+      default: 0
+    }, 
     currentChunk: {
-      type: Object,
-      default: {
-        position: {x: 0, y: 0},
-        state: new Array(10000),
-        original_id: '095d9a68-7ebd-4d95-9b97-1d51b32c7718'
-      },
-      required: true
+      type: Array,
+      required: true,
+
     },
     color:{
         type: String,

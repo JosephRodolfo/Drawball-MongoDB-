@@ -1,103 +1,48 @@
-const mongoose = require("mongoose");
+const { randomUUID } = require("crypto");
+const { Schema, model } = require("mongoose");
 
-const chunkSchema = new mongoose.Schema(
+const chunkSchema = new Schema(
   {
-
-    position: {
-      type: Object,
+    sessionId: {
+      type: String,
       required: true,
-      default: {x: 0, y: 0}
-
+      index: true,
+      default: ()=>{return randomUUID()}
     },
-    state: {
-      type: Array,
-      default: new Array(10000),
+    color: {
+      type: String,
       required: true,
-
+    },
+    chunkX: {
+      type: Number,
+      required: true,
+      min: -100000,
+      max: 100000,
+    },
+    chunkY: {
+      type: Number,
+      required: true,
+      min: -100000,
+      max: 100000,
+    },
+    x: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 99,
+    },
+    y: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 99,
     },
   },
   { timestamps: true }
 );
 
+// chunkSchema.index({ sessionId: 1, x: 1, y: 1 }, { unique: true });
 
-
-
-const Chunk = mongoose.model("Chunk", chunkSchema);
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const chunkSchema = new mongoose.Schema(
-//   {
-//     position: {
-//       type: Object,
-//       required: true,
-//       default: { x: 0, y: 0 },
-//     },
-//     state: [
-//       {
-//         coords: {
-//           type: Object,
-//           required: true,
-//         },
-//         color: {
-//           type: String,
-//           required: true,
-//         },
-//       },
-//     ],
-//   },
-//   { timestamps: true }
-// );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var chunkSchema = new mongoose.Schema({
-//      position: {
-//   type: Object,
-//   required: true,
-//   default: {x: 0, y: 0}
-
-// },
-//   state: [
-//       {
-//           type: Schema.Types.ObjectId,
-//           ref: 'pixel'
-//       }
-//   ]
-// });
-
-// const pixelSchema = new mongoose.Schema({
-//        coords: Object,
-      // color: string
-// });
-
-// // models
-// const Chunk  = mongoose.model('Chunk', chunkSchema);
-// const Pixel = mongoose.model('Pixel', pixelSchema);
+const Chunk = model("chunk", chunkSchema);
 
 module.exports = Chunk;
