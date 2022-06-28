@@ -17,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "hashids": "^2.2.10",
     "jsonwebtoken": "^8.4.0",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.0",

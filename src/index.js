@@ -1,4 +1,3 @@
-const { Socket } = require("socket.io");
 const { app } = require("./app");
 const port = process.env.PORT;
 const {
@@ -115,7 +114,5 @@ const generateMessage = (text) => {
   };
 };
 const generateUpdate = (coords) => {
-  return {
-    coords
-  };
+  return coords
 }

@@ -1,10 +1,14 @@
 const Chunk = require("../models/chunk.model");
+const { createHashIdFromCoords } = require("../utils/createHashFromId")
 
-//creates chunks the default sessionId is random. 
+//creates chunks the default sessionId is random.
 const createChunk = async (req, res) => {
   const chunk = new Chunk({
     ...req.body,
+    sessionId: createHashIdFromCoords(req.body.chunkX, req.body.chunkY)
+
   });
+  console.log(chunk)
 
   try {
     await chunk.save();
@@ -50,6 +54,7 @@ const updateChunk = async (req, res) => {
       return res.status(404).send();
     }
     updates.forEach((update) => (chunk[update] = req.body[update]));
+    
 
     await chunk.save();
 
@@ -60,15 +65,13 @@ const updateChunk = async (req, res) => {
 };
 
 const colorChunk = async (req, res) => {
-  
+  const newSessionId = createHashIdFromCoords(req.body.chunkX, req.body.chunkY)
   try {
-
     const chunk = await Chunk.findOneAndUpdate(
-      {  chunkX: req.body.chunkX, chunkY: req.body.chunkY, x: req.body.x, y: req.body.y},
+      {  chunkX: req.body.chunkX, chunkY: req.body.chunkY, x: req.body.x, y: req.body.y, sessionId: newSessionId},
       { $set: {color: req.body.color} },
       { returnDocument: 'after',  upsert:true, returnNewDocument : true },
     );
-
 
     res.send(chunk);
   } catch(e){
