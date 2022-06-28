@@ -7,7 +7,7 @@ const chunkSchema = new Schema(
       type: String,
       required: true,
       index: true,
-      default: ()=>{return randomUUID()}
+      default: ()=>randomUUID()
     },
     color: {
       type: String,

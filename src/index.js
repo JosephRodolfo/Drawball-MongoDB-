@@ -5,6 +5,7 @@ const {
   removeUser,
   getUser,
   switchRooms,
+  getUsersInRoom
 } = require("./utils/users");
 
 const server = app.listen(port, () => {
@@ -28,6 +29,9 @@ io.on("connection", (socket) => {
     socket.join(user.room);
 
     socket.emit("message", generateMessage("Welcome!"));
+
+    getUsersInRoom(user.room).length>1 ? io.in(user.room).emit("startSharePosition", true) : io.in(user.room).emit("startSharePosition", false)
+
 
     callback();
   });
@@ -63,20 +67,24 @@ io.on("connection", (socket) => {
 
 
   socket.on("switch", (options, callback) => {
-
     const { error, room, user } = switchRooms({ id: socket.id, ...options });
-    if (error || !room) {
-      return callback(error);
 
-    
+    if (error || !room) {
+      return callback(error);    
     }
 
     socket.leave(user.room)
 
-      socket.join(room);
+    socket.join(room);
 
     user.room = room;
-    socket.emit("message", generateMessage( `user swithced rooms from ${user.room}`));
+
+   getUsersInRoom(room).length>1 ? io.in(room).emit("startSharePosition", true) : io.in(room).emit("startSharePosition", false)
+
+
+
+
+   socket.emit("message", generateMessage( `user swithced rooms from ${user.room}`));
     socket.to(user.room)
       .emit("message", generateMessage(`${user.userId} has joined!`));
 
