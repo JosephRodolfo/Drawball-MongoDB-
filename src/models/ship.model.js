@@ -35,6 +35,8 @@ const shipSchema = new mongoose.Schema(
     inkLevel: {
       type: Number,
       default: 100,
+      max: 500,
+      min: 0,
       required: true
     },
     size: {
@@ -51,6 +53,24 @@ const shipSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+shipSchema.methods.changeInkLevel = function(number){
+    if (this.inkLevel <= 0){
+      return;
+    }
+    this.inkLevel = this.inkLevel + number;
+    this.save();
+    return this.inkLevel;
+ };
+
+ shipSchema.statics.testFindById = async (_id) => {
+  const ship = await Ship.findById(_id);
+
+  if (!ship) {
+    throw new Error("Unable to find ship");
+  }
+  return ship;
+};
 
 const Ship = mongoose.model("Ship", shipSchema);
 

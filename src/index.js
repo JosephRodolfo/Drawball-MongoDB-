@@ -1,11 +1,12 @@
 const { app } = require("./app");
+const Ship = require("./models/ship.model")
 const port = process.env.PORT;
 const {
   addUser,
   removeUser,
   getUser,
   switchRooms,
-  getUsersInRoom
+  getUsersInRoom,
 } = require("./utils/users");
 
 const server = app.listen(port, () => {
@@ -30,8 +31,9 @@ io.on("connection", (socket) => {
 
     socket.emit("message", generateMessage("Welcome!"));
 
-    getUsersInRoom(user.room).length>1 ? io.in(user.room).emit("startSharePosition", true) : io.in(user.room).emit("startSharePosition", false)
-
+    getUsersInRoom(user.room).length > 1
+      ? io.in(user.room).emit("startSharePosition", true)
+      : io.in(user.room).emit("startSharePosition", false);
 
     callback();
   });
@@ -48,44 +50,43 @@ io.on("connection", (socket) => {
       generateMessage(`${user.id} is you, and you have painted in ${user.room}`)
     );
 
-    socket.to(user.room)
-      .emit(
-        "message",
-        generateMessage(`${user.id} has updated the board in room ${user.room}!`)
-      );
-
-      socket.broadcast
+    socket
       .to(user.room)
       .emit(
-        "transferCoords",
-        generateUpdate(update)
+        "message",
+        generateMessage(
+          `${user.id} has updated the board in room ${user.room}!`
+        )
+      );
 
-
-      )
-
+    socket.broadcast
+      .to(user.room)
+      .emit("transferCoords", generateUpdate(update));
   });
-
 
   socket.on("switch", (options, callback) => {
     const { error, room, user } = switchRooms({ id: socket.id, ...options });
 
     if (error || !room) {
-      return callback(error);    
+      return callback(error);
     }
 
-    socket.leave(user.room)
+    socket.leave(user.room);
 
     socket.join(room);
 
     user.room = room;
 
-   getUsersInRoom(room).length>1 ? io.in(room).emit("startSharePosition", true) : io.in(room).emit("startSharePosition", false)
+    getUsersInRoom(room).length > 1
+      ? io.in(room).emit("startSharePosition", true)
+      : io.in(room).emit("startSharePosition", false);
 
-
-
-
-   socket.emit("message", generateMessage( `user swithced rooms from ${user.room}`));
-    socket.to(user.room)
+    socket.emit(
+      "message",
+      generateMessage(`user swithced rooms from ${user.room}`)
+    );
+    socket
+      .to(user.room)
       .emit("message", generateMessage(`${user.userId} has joined!`));
 
     callback();
@@ -94,19 +95,18 @@ io.on("connection", (socket) => {
   socket.on("leave", () => {
     const user = removeUser(socket.id);
     if (user) {
-      socket.leave(user.room)
+      socket.leave(user.room);
       io.to(user.room).emit(
         "message",
         generateMessage(`${user.userId} has left!`)
       );
     }
   });
-
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     if (user) {
-      socket.leave(user.room)
+      socket.leave(user.room);
 
       io.to(user.room).emit(
         "message",
@@ -114,7 +114,20 @@ io.on("connection", (socket) => {
       );
     }
   });
+
+  socket.on("incrementInk", async (options) => {
+
+    const {id, ink} = options;
+    console.log(id, ink)
+    const ship = await Ship.testFindById(id);
+    ship.inkLevel = ink;
+    ship.save()
+
+
+  });
 });
+
+
 
 const generateMessage = (text) => {
   return {
@@ -122,5 +135,5 @@ const generateMessage = (text) => {
   };
 };
 const generateUpdate = (coords) => {
-  return coords
-}
+  return coords;
+};

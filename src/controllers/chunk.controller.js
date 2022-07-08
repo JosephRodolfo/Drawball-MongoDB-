@@ -1,4 +1,5 @@
 const Chunk = require("../models/chunk.model");
+const Ship = require("../models/ship.model")
 const { createHashIdFromCoords } = require("../utils/createHashFromId")
 
 //creates chunks the default sessionId is random.
@@ -8,7 +9,6 @@ const createChunk = async (req, res) => {
     sessionId: createHashIdFromCoords(req.body.chunkX, req.body.chunkY)
 
   });
-  console.log(chunk)
 
   try {
     await chunk.save();
@@ -65,15 +65,24 @@ const updateChunk = async (req, res) => {
 };
 
 const colorChunk = async (req, res) => {
+
+  const ship = await Ship.testFindById(req.body.id);
+
+
+  if (ship.inkLevel <=0){
+    return res.status(400).send();
+  }
   const newSessionId = createHashIdFromCoords(req.body.chunkX, req.body.chunkY)
   try {
     const chunk = await Chunk.findOneAndUpdate(
       {  chunkX: req.body.chunkX, chunkY: req.body.chunkY, x: req.body.x, y: req.body.y, sessionId: newSessionId},
       { $set: {color: req.body.color} },
-      { returnDocument: 'after',  upsert:true, returnNewDocument : true },
+      { returnDocument: 'after',  upsert: true, returnNewDocument: true },
     );
 
-    res.send(chunk);
+    const inkLevel = ship.changeInkLevel(-1)
+    
+    res.send({chunk, inkLevel});
   } catch(e){
     console.log(e)
 

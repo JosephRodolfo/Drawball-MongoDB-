@@ -38,10 +38,10 @@ const chunkSchema = new Schema(
       max: 99,
     },
   },
-  { timestamps: true }
+  // { timestamps: true }
 );
 
-// chunkSchema.index({ sessionId: 1, x: 1, y: 1 }, { unique: true });
+chunkSchema.index({ sessionId: 1, x: 1, y: 1, chunkX: 1, chunkY: 1}, { unique: true });
 
 const Chunk = model("chunk", chunkSchema);
 
