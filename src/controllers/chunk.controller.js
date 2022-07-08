@@ -8,7 +8,6 @@ const createChunk = async (req, res) => {
     sessionId: createHashIdFromCoords(req.body.chunkX, req.body.chunkY)
 
   });
-  console.log(chunk)
 
   try {
     await chunk.save();
@@ -70,7 +69,7 @@ const colorChunk = async (req, res) => {
     const chunk = await Chunk.findOneAndUpdate(
       {  chunkX: req.body.chunkX, chunkY: req.body.chunkY, x: req.body.x, y: req.body.y, sessionId: newSessionId},
       { $set: {color: req.body.color} },
-      { returnDocument: 'after',  upsert:true, returnNewDocument : true },
+      { returnDocument: 'after',  upsert: true, returnNewDocument: true },
     );
 
     res.send(chunk);

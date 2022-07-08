@@ -52,6 +52,14 @@ const shipSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+shipSchema.methods.mongoTest = function updateShipColor (color) {
+    this.color = "orange";
+    this.save();
+    console.log('TESSSSSSSSSSSSSSTTTTE');
+    alert("TEEEST")
+  return this.model('Ship');
+};
+
 const Ship = mongoose.model("Ship", shipSchema);
 
 module.exports = Ship;
