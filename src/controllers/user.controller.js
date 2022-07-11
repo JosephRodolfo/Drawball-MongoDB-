@@ -28,7 +28,7 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
   try {
     const user = await User.findByCredentials(
-      req.body.email,
+      req.body.username,
       req.body.password
     );
     const token = await user.generateAuthToken();

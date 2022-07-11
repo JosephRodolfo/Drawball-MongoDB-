@@ -1,21 +1,21 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
+// const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
-    email: {
+    username: {
       type: String,
       unique: true,
       required: true,
       trim: true,
       lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error("email is invalid");
-        }
-      },
+      // validate(value) {
+      //   if (!validator.isEmail(value)) {
+      //     throw new Error("email is invalid");
+      //   }
+      // },
     },
     password: {
       type: String,
@@ -69,8 +69,8 @@ userSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-userSchema.statics.findByCredentials = async (email, password) => {
-  const user = await User.findOne({ email });
+userSchema.statics.findByCredentials = async (username, password) => {
+  const user = await User.findOne({ username });
 
   if (!user) {
     throw new Error("Unable to log in");

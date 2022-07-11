@@ -15,7 +15,7 @@ const server = app.listen(port, () => {
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.DOMAIN,
   },
 });
 
@@ -118,7 +118,6 @@ io.on("connection", (socket) => {
   socket.on("incrementInk", async (options) => {
 
     const {id, ink} = options;
-    console.log(id, ink)
     const ship = await Ship.testFindById(id);
     ship.inkLevel = ink;
     ship.save()
