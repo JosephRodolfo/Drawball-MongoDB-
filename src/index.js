@@ -14,10 +14,19 @@ const server = app.listen(port, () => {
 });
 
 const io = require("socket.io")(server, {
-  cors: {
-    origin: process.env.DOMAIN,
-    credentials: true,
-  },
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Origin": process.env.DOMAIN, //or the specific origin you want to give access to,
+        "Access-Control-Allow-Credentials": true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+
+
+
+
 });
 
 io.on("connection", (socket) => {
