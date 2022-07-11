@@ -7,7 +7,7 @@ app.use(express.urlencoded({limit: '50mb', extended: true}));
 const cors = require("cors");
 const corsOptions = {
   origin: process.env.DOMAIN,
-  // credentials: true,
+  credentials: true,
 };
 app.use(cors(corsOptions));
 

@@ -1,6 +1,6 @@
 const { app } = require("./app");
 const Ship = require("./models/ship.model")
-const port = process.env.PORT;
+const port = process.env.PORT || 2000;
 const {
   addUser,
   removeUser,
