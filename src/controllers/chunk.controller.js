@@ -21,7 +21,7 @@ const createChunk = async (req, res) => {
 //finds list of all documents in Chunk collection corresponding to chunkX, chunkY. 
 const getChunkByPosition = async (req, res) => {
   try {
-    const chunk = await Chunk.find({ chunkX: req.body.chunkX, chunkY: req.body.chunkY });
+    const chunk = await Chunk.find({ chunkX: req.query.chunkX, chunkY: req.query.chunkY });
 //if not found, sends empty array, triggers creation of new sessionId, chunk position with next place color
     if (!chunk || chunk.length === 0) {
       return res.send([]);
